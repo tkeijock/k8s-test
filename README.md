@@ -1,2 +1,106 @@
-# k8s-test
-Repository to streamline cluster instalation
+# k8s-test : Overview 
+
+This repository exists to document my learning journey while exploring Kubernetes , specifically using AWS EKS (Elastic Kubernetes Service). This repository serves as a permanent reference for the essential steps, concepts, and commands required to reproduce the entire setup whenever needed.
+
+The idea is not just to store notes, but to provide a structured guide that enables me to:
+
+- Have a central place to revisit configuration and deployment steps without repeatedly searching for scattered information
+
+- Experiment locally—using a controlled test environment—before applying the same concepts to production workloads on EKS
+
+- Understand how Kubernetes behaves when running inside AWS, especially in terms of scalability, availability, and infrastructure integration
+
+
+
+# 🏗️ Architecture Overview
+
+## EKS 
+When working with Kubernetes, we rely on a cluster to provide the underlying infrastructure required to run and manage containerized applications.
+In a traditional on-premises setup, I would be responsible for provisioning and maintaining these elements manually. 
+
+AWS removes that operational burden through EKS by provisioning a fully managed Kubernetes control plane and uses EC2 instances as worker nodes to run workloads. By leveraging EC2, these nodes inherit the capabilities of the AWS cloud, including:
+- High availability
+- Automatic scalability 
+- Multi-AZ redundancy 
+- Native AWS integrations 
+
+In essence, EKS provides Kubernetes with cloud-grade reliability, where EC2 instances act as worker nodes that I can manage directly through kubectl.
+
+## EKS vs Minikube 
+Minikube provides a lightweight, local Kubernetes cluster that runs inside a single virtual machine. It does not create multiple virtual machines, nor multiple physical nodes . Instead, it simulates a Kubernetes cluster by running all core components (control plane + worker node) on the same machine (the nodes are logical, not separate machines).
+
+In this test environment, I will use Minikube to simulate a Kubernetes cluster inside a single EC2 instance. Minikube provides a lightweight, local cluster that is perfect for learning and experimentation.
+
+Without Minikube, I would need to provision multiple EC2 instances, configure them as Kubernetes nodes, and manage all the required infrastructure myself — something that only makes sense later, when moving to a real EKS production environment.
+
+---
+# Testing :
+
+## testing enviroment overview : 
+- create a EC2 instance
+- install Kubectl, Docker and  Minikube.
+-
+-
+
+
+
+
+
+## 🖥️ Create a EC2 Instance
+1️⃣ Access the AWS Console:
+
+Log into your AWS account , Navigate to EC2,  Click Launch instance:
+
+2️⃣ Instance Configuration
+
+AMI= Ubuntu Server 18.04 LTS (HVM), SSD Volume Type
+
+Instance Type= t3.small  with  2 vCPU / 2 GB
+
+SSH Key Pair=	Use an existing key or create a new one
+
+ Why t3.small instead of t2.micro?
+ 
+Minikube requires more memory. The free-tier t2.micro (1 vCPU, 1 GB RAM) is insufficient and Minikube will fail to run properly.
+The t3.small offers 2 GB RAM, which is enough for this setup.
+
+Note: The t3.small costs roughly twice as much as a t2.micro, but since this instance is for development and not running 24/7, the monthly cost remains low.
+
+
+3
+
+Open an SSH client. (If using Windows, you may use PuTTY or another SSH tool.)
+Locate your private key file (.pem) used when launching the instance.
+Ensure the key has the correct permissions (it must not be publicly viewable). change permision to file:
+
+```chmod 400 <your-key-file>.pem``` 
+
+Connect to your instance using its Public DNS or Public IP. Use the appropriate username for your AMI (e.g., ec2-user, ubuntu, admin, centos):
+
+``` ssh -i "<your-key-file>.pem" <username>@<public-dns-or-ip>``` 
+
+example : 
+
+``` ssh -i "mykey.pem" ubuntu@ec2-xx-xxx-xxx-xxx.compute-1.amazonaws.com ```
+
+ or
+
+ ``` ssh -i "mykey.pem" ec2-user@11.22.33.44 ```
+
+## 🖥️ Install Kubectl
+
+Linux: https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+
+Windows: https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/
+
+```
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+
+chmod +x ./kubectl
+
+sudo mv ./kubectl /usr/local/bin/
+
+kubectl help  
+```
+  
+

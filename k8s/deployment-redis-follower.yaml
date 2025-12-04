@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: redis-slave
+  name: redis-follower
   labels:
     app: demo-dashboard
-    component: redis-slave
+    component: redis-follower
     tier: backend
 spec:
   replicas: 2
   selector:
     matchLabels:
       app: demo-dashboard
-      component: redis-slave
+      component: redis-follower
       tier: backend
   template:
     metadata:
       labels:
         app: demo-dashboard
-        component: redis-slave
+        component: redis-follower
         tier: backend
     spec:
       restartPolicy: Always
       containers:
-        - name: redis-slave
+        - name: redis-follower
           image: redis:7.2  # Same Redis version as master
           ports:
             - containerPort: 6379  # Default Redis port

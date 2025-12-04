@@ -1,15 +1,10 @@
 # k8s-eks-showcase : Overview 
 
-This repository exists to document my learning journey while exploring Kubernetes, specifically using AWS EKS (Elastic Kubernetes Service). This repository serves as a permanent reference for the essential steps, concepts, and commands required to reproduce the entire setup whenever needed.
+This repository documents my learning journey exploring Kubernetes, specifically on AWS EKS (Elastic Kubernetes Service). It serves as a permanent reference for the steps, concepts, and commands needed to reproduce the setup.
 
-The idea is not just to store notes, but to provide a structured guide that enables me to:
+The goal is not just to store notes, but to provide a structured guide that allows me to revisit configurations easily, experiment locally in a test environment, and understand how Kubernetes behaves in AWS in terms of scalability, availability, and integration with cloud services.
 
-- Have a central place to revisit configuration and deployment steps without repeatedly searching for scattered information
-
-- Experiment locally—using a controlled test environment—before applying the same concepts to production workloads on EKS
-
-- Understand how Kubernetes behaves when running inside AWS, especially in terms of scalability, availability, and infrastructure integration
-
+All configurations are first validated in a lightweight local cluster using Minikube before being deployed to EKS, ensuring a smooth development-to-production workflow.
 
 # 🏗️ Architecture Overview
 
@@ -31,8 +26,15 @@ Minikube runs a complete Kubernetes cluster inside a single virtual machine, com
 In this project, Minikube runs inside a single EC2 instance. Since the instance itself is already virtualized, no additional hypervisor (such as VirtualBox) is needed.
 Using Minikube prevents the overhead of provisioning multiple EC2 instances to manually configure them as Kubernetes nodes to form a cluster — an effort that only becomes necessary when progressing to a real EKS deployment.
 
+## Demo Application Overview
 
-The demo application is a simple Dashboard that uses Redis as its backend storage layer. This application is interesting because it naturally creates multiple components — a Redis Master, a Redis Slave, and a Front-end — giving us a realistic multi-container scenario inside Kubernetes. This structure allows us to experiment with deployments, services, and inter-component communication in a way that resembles a real production environment. The goal isn’t to build or improve the application itself, but to use it as a lightweight, practical example while I focus on Kubernetes deployments, service exposure, port and connectivity testing, and validating the full development-to-production workflow.
+The demo application is a simple Dashboard that uses Redis as its backend storage layer. 
+This application is interesting because it naturally creates multiple components — a Redis Master, a Redis Slave, and a Front-end — giving us a realistic multi-container scenario inside Kubernetes.
+
+This structure allows us to experiment with deployments, services, and inter-component communication in a way that resembles a real production environment. The goal isn’t to build or improve the application itself, but to use it as a lightweight, practical example while I focus on Kubernetes deployments, service exposure, port and connectivity testing, and validating the full development-to-production workflow.
+
+This structure allows us to experiment with deployments, services, and inter-component communication in a way that resembles a real production environment.  
+The goal isn’t to build or improve the application itself, but to use it as a lightweight, practical example while I focus on Kubernetes deployments, service exposure, port and connectivity testing, and validating the full development-to-production workflow.
 
 ---
 This repository is organized into separate guides to keep the workflow clear and structured:

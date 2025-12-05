@@ -3,21 +3,21 @@ kind: Deployment
 metadata:
   name: redis-leader
   labels:
-    app: demo-dashboard
-    component: redis-leader
+    app: redis
+    role: leader
     tier: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: demo-dashboard
-      component: redis-leader
+      app: redis
+      role: leader
       tier: backend
   template:
     metadata:
       labels:
-        app: demo-dashboard
-        component: redis-leader
+        app: redis
+        role: leader
         tier: backend
     spec:
       restartPolicy: Always

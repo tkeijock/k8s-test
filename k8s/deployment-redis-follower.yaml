@@ -3,21 +3,21 @@ kind: Deployment
 metadata:
   name: redis-follower
   labels:
-    app: demo-dashboard
-    component: redis-follower
+    app: redis
+    role: follower
     tier: backend
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: demo-dashboard
-      component: redis-follower
+      app: redis
+      role: follower
       tier: backend
   template:
     metadata:
       labels:
-        app: demo-dashboard
-        component: redis-follower
+        app: redis
+        role: follower
         tier: backend
     spec:
       restartPolicy: Always

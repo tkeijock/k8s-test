@@ -12,7 +12,7 @@ spec:
   type: LoadBalancer
   ports:
     - port: 80  # External port
-      # targetPort defaults to the same as port if not specified
+      #Do NOT use nodeport when using service type:LoadBalancer
   selector:
     app: guestbook
     tier: frontend

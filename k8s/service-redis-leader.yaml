@@ -3,14 +3,14 @@ kind: Service
 metadata:
   name: redis-leader
   labels:
-    app: demo-dashboard
-    component: redis-leader
+    app: redis
+    role: leader
     tier: backend
 spec:
   ports:
   - port: 6379       # Service port (internal cluster port)
     targetPort: 6379 # Container port where Redis is listening (default Redis port)
   selector:
-    app: demo-dashboard
-    component: redis-leader
+    app: redis
+    role: leader
     tier: backend     # Matches the pod labels from Deployment

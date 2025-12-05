@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: redis-master
+  name: redis-leader
   labels:
     app: demo-dashboard
-    component: redis-master
+    component: redis-leader
     tier: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: demo-dashboard
-      component: redis-master
+      component: redis-leader
       tier: backend
   template:
     metadata:
       labels:
         app: demo-dashboard
-        component: redis-master
+        component: redis-leader
         tier: backend
     spec:
       restartPolicy: Always
       containers:
-        - name: redis-master
+        - name: redis-leader
           image: redis:7.2  # Redis image version
           ports:
             - containerPort: 6379  # Default Redis port

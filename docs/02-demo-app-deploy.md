@@ -20,13 +20,19 @@ The Front-end  reads from the Redis follower but write on the Redis Leader. the 
 
 ## Steps 
 
-### Check  version  
+### 1️⃣ Check  version  
 
 ``` kubectl version  ```
 
-For k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
+if needed change inside the .yaml fies :
 
-2️⃣Deploy and expose 
+- Api version:  Use extensions apps/v1 for >=1.9 , , apps/v1beta2 for 1.8–1.8.x and /v1beta1 for <1.8
+
+- For frontend dns : Use 'dns' for Kubernetes >=1.13 (CoreDNS), or 'env' for <=1.12 (older clusters without DNS)
+
+> Here is set to apps/v1  and 'dns'
+
+### 2️⃣ Deploy and expose 
 
 Apply both Deployment and Service for each component: Redis Leader, Redis Followers, and the Frontend
 Note:Leader is only one pod, follower are 2 pods and front-end 3 pods.
@@ -38,19 +44,35 @@ kubectl apply -f https://github.com/tkeijock/k8s-eks-showcase/raw/main/k8s/deplo
 kubectl apply -f https://github.com/tkeijock/k8s-eks-showcase/raw/main/k8s/deployment-redis-follower.yaml
 kubectl apply -f https://github.com/tkeijock/k8s-eks-showcase/raw/main/k8s/service-redis-leader.yaml
 kubectl apply -f https://github.com/tkeijock/k8s-eks-showcase/raw/main/k8s/service-redis-follower.yaml
-
 kubectl apply -f https://github.com/tkeijock/k8s-eks-showcase/raw/main/k8s/service-frontend.yaml # This Service uses type nodeport 
-
-kubectl apply -f https://github.com/tkeijock/k8s-eks-showcase/raw/main/k8s/service-frontend-eks.yaml # This Service uses type LoadBalancer**
 ```
-The default Redis Services are only accessible within the Kubernetes cluster because the default Service type is ClusterIP.
 
-To allow users to access the frontend from outside the cluster, the Service must be made externally visible. There are a few options:
--    ```kubectl port-forward``` for temporary access (it keep using ClusterIP)
-- Change to  NodePort Service.
-  
+### Frontend service :
+
+By default, the frontend Service is of type ClusterIP, which means it is only accessible within the Kubernetes cluster.
+To allow external access, you can make the Service externally visible in several ways:
+
+- Use kubectl port-forward for temporary access (the Service remains ClusterIP).
+
+- Change the Service type to NodePort (recommended for local clusters or testing).
+
+- Change the Service type to LoadBalancer (for clusters running in cloud environments, e.g., EKS).
+
+> **Frontend Service is configured as NodePort to allow predictable port access from outside the cluster**
+
 ### **Service of type LoadBalancer**
 
 In a production cloud environment, it is preferable to use a Service of type LoadBalancer if supported by the cloud provider. This Service type uses a Kubernetes component that communicates with the cloud provider's API to provision an external load balancer.
-Typically, this is implemented using a Kubernetes Ingress controller and Ingress resources to centralize incoming traffic to the cluster.
+
+Typically, this is implemented by exposing an Ingress controller that runs in the cluster. The Ingress controller centralizes incoming traffic and routes it to the appropriate Ingress resources.
+
+## Testing 
+
+1️⃣ Check service port
+if the port was not specified in the service, it is possible to check this command to show url and port:
+
+``` minkube service fronted --url ```
+
+2️⃣ 
+in the cloud, create a security group with the above Port and associate it to the instance
 
